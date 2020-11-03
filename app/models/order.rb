@@ -15,7 +15,7 @@ class Order < ApplicationRecord
   end
 
   def status_check
-    if self.item_orders.fulfilled(self.id).count == self.item_orders.count && self.status != "packaged"
+    if self.item_orders.fulfilled.count == self.item_orders.count && self.status != "packaged"
       update(:status => "packaged")
     end
     self.status

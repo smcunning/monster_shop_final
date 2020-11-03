@@ -1,6 +1,6 @@
 class ItemOrder <ApplicationRecord
   validates_presence_of :item_id, :order_id, :price, :quantity
-  scope :fulfilled, -> (order_id){ where('order_id = ? AND fulfill_status = ?', order_id, "fulfilled")}
+  scope :fulfilled, -> { where('fulfill_status = ?', "fulfilled")}
 
   belongs_to :item
   belongs_to :order
