@@ -28,15 +28,15 @@ FactoryBot.define do
     end
 
     trait :with_item_orders do
-      transient do 
+      transient do
         item_count { 3 }
       end
-      
+
       after(:create) do |merchant, evaluator|
         merchant.items << create_list(:item, evaluator.item_count)
-        create(:item_order, item: merchant.items[0]) 
-        create(:item_order, item: merchant.items[1]) 
-        create(:item_order, item: merchant.items[2]) 
+        create(:item_order, item: merchant.items[0])
+        create(:item_order, item: merchant.items[1])
+        create(:item_order, item: merchant.items[2])
       end
     end
   end
@@ -44,6 +44,7 @@ FactoryBot.define do
   factory :item do
     sequence(:name) { |n| "Item ##{n}" }
     description { Faker::Lorem.sentence }
+    # Can we specify a price range? Validation failed: Price must be greater than 0
     price { Faker::Commerce.price }
     image { 'https://semantic-ui.com/images/wireframe/image.png' }
     inventory { Faker::Number.between(from: 12, to: 34) }
