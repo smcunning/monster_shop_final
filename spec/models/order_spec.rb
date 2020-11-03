@@ -24,9 +24,11 @@ describe Order, type: :model do
       @pull_toy = @brian.items.create(name: "Pull Toy", description: "Great pull toy!", price: 10, image: "http://lovencaretoys.com/image/cache/dog/tug-toy-dog-pull-9010_2-800x800.jpg", inventory: 32)
       @user = create(:user)
       @order_1 = Order.create!(name: 'Meg', address: '123 Stang Ave', city: 'Hershey', state: 'PA', zip: 17033, user_id: @user.id)
+      @order_2 = Order.create!(name: 'Meg', address: '123 Stang Ave', city: 'Philadelphia', state: 'PA', zip: 17000, user_id: @user.id)
 
       @item_order_1 = @order_1.item_orders.create!(item: @tire, price: @tire.price, quantity: 2)
       @item_order_2 = @order_1.item_orders.create!(item: @pull_toy, price: @pull_toy.price, quantity: 3)
+      @item_order_3 = @order_2.item_orders.create!(item: @tire, price: @tire.price, quantity: 8)
     end
     it 'grandtotal' do
       expect(@order_1.grandtotal).to eq(230)
@@ -37,11 +39,13 @@ describe Order, type: :model do
     end
 
     describe '#status_check' do
-      it 'will return packaged if all statuses are fulfilled' do
+      it 'will return packaged if all statuses are fulfilled for order' do
         @item_order_1.fulfill_status = "fulfilled"
         @item_order_1.save
         @item_order_2.fulfill_status = "fulfilled"
         @item_order_2.save
+        @item_order_3.fulfill_status = "nonfulfilled"
+        @item_order_3.save
 
         expect(@order_1.status_check).to eq("packaged")
       end
