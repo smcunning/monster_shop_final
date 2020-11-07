@@ -23,21 +23,21 @@ describe "Merchant Discounts Index Page" do
         expect(page).to have_link(@discount_1.name)
         expect(page).to have_content(@discount_1.percentage)
         expect(page).to have_content(@discount_1.min_purchase)
-        expect(page).to have_content(@discount_1.active?)
+        expect(page).to have_content("Discount Active")
       end
 
       within "#discount-#{@discount_2.id}" do
         expect(page).to have_link(@discount_2.name)
         expect(page).to have_content(@discount_2.percentage)
         expect(page).to have_content(@discount_2.min_purchase)
-        expect(page).to have_content(@discount_2.active?)
+        expect(page).to have_content("Discount Active")
       end
 
       within "#discount-#{@discount_3.id}" do
         expect(page).to have_link(@discount_3.name)
         expect(page).to have_content(@discount_3.percentage)
         expect(page).to have_content(@discount_3.min_purchase)
-        expect(page).to have_content(@discount_3.active?)
+        expect(page).to have_content("Discount Inactive")
       end
     end
 
