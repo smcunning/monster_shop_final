@@ -5,9 +5,9 @@ describe "Merchant Discounts Index Page" do
     before(:each) do
       merchant = create(:merchant)
       merchant_user = create(:user, role: 1, merchant_id: merchant.id)
-      discount_1 = Discount.create!(name: "5% Off", percentage: 0.05, min_purchase: 5, status: "active", merchant_id: merchant.id)
-      discount_2 = Discount.create!(name: "10% Off", percentage: 0.10, min_purchase: 10, status: "active", merchant_id: merchant.id)
-      discount_3 = Discount.create!(name: "25% Off", percentage: 0.25, min_purchase: 5, status: "active", merchant_id: merchant.id)
+      discount_1 = Discount.create!(name: "5% Off", percentage: 0.05, min_purchase: 5, active?: true, merchant_id: merchant.id)
+      discount_2 = Discount.create!(name: "10% Off", percentage: 0.10, min_purchase: 10, active?: true, merchant_id: merchant.id)
+      discount_3 = Discount.create!(name: "25% Off", percentage: 0.25, min_purchase: 5, active?: false, merchant_id: merchant.id)
     end
 
     it 'shows me a list of that merchants discounts' do
