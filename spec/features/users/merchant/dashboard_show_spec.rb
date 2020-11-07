@@ -73,5 +73,20 @@ describe 'As a merchant employee' do
       expect(current_path).to eq("/merchant/items")
     end
 
+    it "has a link I can click to see all of my bulk discounts" do
+      merchant = create(:merchant)
+      merchant_user = create(:user, role:1, merchant_id: merchant.id)
+
+      visit login_path
+
+      fill_in :email, with: merchant_user.email
+      fill_in :password, with: 'password'
+      click_button 'Login'
+
+
+      click_link "Bulk Discounts"
+
+      expect(current_path).to eq("/merchant/discounts")
+    end
   end
 end
