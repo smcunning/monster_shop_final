@@ -8,10 +8,16 @@ describe "Merchant Discounts Index Page" do
       @discount_1 = Discount.create!(name: "5% Off", percentage: 0.05, min_purchase: 5, active?: true, merchant_id: @merchant.id)
       @discount_2 = Discount.create!(name: "10% Off", percentage: 0.10, min_purchase: 10, active?: true, merchant_id: @merchant.id)
       @discount_3 = Discount.create!(name: "25% Off", percentage: 0.25, min_purchase: 5, active?: false, merchant_id: @merchant.id)
+
+      visit login_path
+      fill_in :email, with: @merchant_user.email
+      fill_in :password, with: @merchant_user.password
+      click_button "Login"
     end
 
     it 'shows me a list of that merchants discounts' do
       visit "/merchant/discounts"
+      save_and_open_page
 
       within "#discount-#{@discount_1.id}" do
         expect(page).to have_link(@discount_1.name)
