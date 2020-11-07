@@ -3,11 +3,11 @@ require 'rails_helper'
 describe "Merchant Discounts Index Page" do
   describe "When I visit the merchant discounts page" do
     before(:each) do
-      merchant = create(:merchant)
-      merchant_user = create(:user, role: 1, merchant_id: merchant.id)
-      discount_1 = Discount.create!(name: "5% Off", percentage: 0.05, min_purchase: 5, active?: true, merchant_id: merchant.id)
-      discount_2 = Discount.create!(name: "10% Off", percentage: 0.10, min_purchase: 10, active?: true, merchant_id: merchant.id)
-      discount_3 = Discount.create!(name: "25% Off", percentage: 0.25, min_purchase: 5, active?: false, merchant_id: merchant.id)
+      @merchant = create(:merchant)
+      @merchant_user = create(:user, role: 1, merchant_id: @merchant.id)
+      @discount_1 = Discount.create!(name: "5% Off", percentage: 0.05, min_purchase: 5, active?: true, merchant_id: @merchant.id)
+      @discount_2 = Discount.create!(name: "10% Off", percentage: 0.10, min_purchase: 10, active?: true, merchant_id: @merchant.id)
+      @discount_3 = Discount.create!(name: "25% Off", percentage: 0.25, min_purchase: 5, active?: false, merchant_id: @merchant.id)
     end
 
     it 'shows me a list of that merchants discounts' do
@@ -17,21 +17,21 @@ describe "Merchant Discounts Index Page" do
         expect(page).to have_link(@discount_1.name)
         expect(page).to have_content(@discount_1.percentage)
         expect(page).to have_content(@discount_1.min_purchase)
-        expect(page).to have_content(@discount_1.status)
+        expect(page).to have_content(@discount_1.active?)
       end
 
       within "#discount-#{@discount_2.id}" do
         expect(page).to have_link(@discount_2.name)
         expect(page).to have_content(@discount_2.percentage)
         expect(page).to have_content(@discount_2.min_purchase)
-        expect(page).to have_content(@discount_2.status)
+        expect(page).to have_content(@discount_2.active?)
       end
 
       within "#discount-#{@discount_3.id}" do
         expect(page).to have_link(@discount_3.name)
         expect(page).to have_content(@discount_3.percentage)
         expect(page).to have_content(@discount_3.min_purchase)
-        expect(page).to have_content(@discount_3.status)
+        expect(page).to have_content(@discount_3.active?)
       end
     end
 
