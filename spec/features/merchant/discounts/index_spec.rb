@@ -17,7 +17,6 @@ describe "Merchant Discounts Index Page" do
 
     it 'shows me a list of that merchants discounts' do
       visit "/merchant/discounts"
-      save_and_open_page
 
       within "#discount-#{@discount_1.id}" do
         expect(page).to have_link(@discount_1.name)
