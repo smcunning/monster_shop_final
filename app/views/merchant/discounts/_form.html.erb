@@ -1,0 +1,7 @@
+<%= form_for [@merchant, @discount] do |f| %>
+  Discount Name: <%= f.text_field :name %><br />
+  Percentage Off: <%= f.number_field('percentage', :in => 1...100) %><br />
+  Minimum Purchase to Achieve: <%= f.number_field('min_purchase', :in => 1...10000)%><br />
+
+  <%= f.submit %>
+<% end %>
