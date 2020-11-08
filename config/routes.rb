@@ -23,7 +23,7 @@ Rails.application.routes.draw do
     resources :items, except: [:show]
     get '/orders/:order_id', to: "orders#show"
     patch '/orders/:order_id', to: "orders#update"
-    resources :discounts, except: [:update, :edit, :delete]
+    resources :discounts
   end
 
   resources :merchants, except: [:delete]
