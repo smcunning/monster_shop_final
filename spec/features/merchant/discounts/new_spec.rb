@@ -26,11 +26,11 @@ describe "As a merchant employee" do
 
       expect(current_path).to eq("/merchant/discounts/new")
 
-      fill_in :name, with: name
-      fill_in :percentage, with: percentage
-      fill_in :min_purchase, with: min_purchase
+      fill_in :discount_name, with: name
+      fill_in :discount_percentage, with: percentage
+      fill_in :discount_min_purchase, with: min_purchase
 
-      click_button "Save"
+      click_button "Create Discount"
 
       new_discount = Discount.last
 
@@ -60,13 +60,13 @@ describe "As a merchant employee" do
 
         click_link "Create Discount"
 
-        fill_in :name, with: ""
-        fill_in :percentage, with: percentage
-        fill_in :min_purchase, with: min_purchase
+        fill_in :discount_name, with: ""
+        fill_in :discount_percentage, with: percentage
+        fill_in :discount_min_purchase, with: min_purchase
 
-        click_button "Save"
+        click_button "Create Discount"
 
-        expect(current_path).to eq("/merchant/discounts")
+        expect(current_path).to eq("/merchant/discounts/new")
         expect(page).to have_content("Name can't be blank")
       end
 
@@ -76,13 +76,13 @@ describe "As a merchant employee" do
 
         click_link "Create Discount"
 
-        fill_in :name, with: name
-        fill_in :percentage, with: ""
-        fill_in :min_purchase, with: min_purchase
+        fill_in :discount_name, with: name
+        fill_in :discount_percentage, with: ""
+        fill_in :discount_min_purchase, with: min_purchase
 
-        click_button "Save"
+        click_button "Create Discount"
 
-        expect(current_path).to eq("/merchant/discounts")
+        expect(current_path).to eq("/merchant/discounts/new")
         expect(page).to have_content("Percentage can't be blank")
       end
 
@@ -92,13 +92,13 @@ describe "As a merchant employee" do
 
         click_link "Create Discount"
 
-        fill_in :name, with: name
-        fill_in :percentage, with: percentage
-        fill_in :min_purchase, with: ""
+        fill_in :discount_name, with: name
+        fill_in :discount_percentage, with: percentage
+        fill_in :discount_min_purchase, with: ""
 
-        click_button "Save"
+        click_button "Create Discount"
 
-        expect(current_path).to eq("/merchant/discounts")
+        expect(current_path).to eq("/merchant/discounts/new")
         expect(page).to have_content("Min purchase can't be blank")
       end
     end
