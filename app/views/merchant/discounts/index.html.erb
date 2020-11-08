@@ -11,7 +11,7 @@
       <h4><%= link_to "#{discount.name}", "/merchant/discounts/#{discount.id}" %></h4>
       <p>Discount Percentage: <%= discount.percentage %><br>
       Minimum Purchase for Discount: <%= discount.min_purchase %></p>
-      <%= button_to "Edit", "/merchant/discounts/#{discount.id}", method: :patch %>
+      <%= button_to "Edit", "/merchant/discounts/#{discount.id}/edit", method: :get %>
       <% if discount.active? %>
         <%= "Discount Active" %>
       <% else %>
