@@ -55,15 +55,15 @@ describe "As a merchant employee" do
 
     it "is pre-populated with all the discount's information" do
       expect(current_path).to eq("/merchant/discounts/#{@discount_1.id}/edit")
-      expect(find_field(:name).value).to eq(@discount_1.name)
-      expect(find_field(:percentage).value).to eq(@discount_1.price.to_s)
-      expect(find_field(:min_purchase).value).to eq(@discount_1.description)
+      expect(find_field(:discount_name).value).to eq(@discount_1.name)
+      expect(find_field(:discount_percentage).value).to eq(@discount_1.percentage.to_s)
+      expect(find_field(:discount_min_purchase).value).to eq(@discount_1.min_purchase.to_s)
     end
 
     it "and I can change the data about the item" do
-      fill_in :name, with: "Holiday Promo"
-      fill_in :percentage, with: 0.20
-      fill_in :min_purchase, with: 5
+      fill_in :discount_name, with: "Holiday Promo"
+      fill_in :discount_percentage, with: 0.20
+      fill_in :discount_min_purchase, with: 5
 
       click_on "Update Discount"
 
@@ -72,23 +72,23 @@ describe "As a merchant employee" do
 
       within "#discount-#{@discount_1.id}" do
         expect(page).to have_content("Holiday Promo")
-        expect(page).to have_content("0.20")
+        expect(page).to have_content("0.2")
         expect(page).to have_content("5")
       end
     end
 
 
     it 'I get a flash message if entire form is not filled out' do
-      fill_in :name, with: ""
-      fill_in :percentage, with: 0.20
-      fill_in :min_purchase, with: 5
+      fill_in :discount_name, with: ""
+      fill_in :discount_percentage, with: 0.20
+      fill_in :discount_min_purchase, with: 5
 
       click_button "Update Discount"
 
       expect(page).to have_content("Name can't be blank")
-      expect(find_field(:name).value).to eq("")
-      expect(find_field(:percentage).value).to eq(0.20)
-      expect(find_field(:min_purchase).value).to eq(5)
+      expect(find_field(:discount_name).value).to eq("5% Off")
+      expect(find_field(:discount_percentage).value).to eq("0.05")
+      expect(find_field(:discount_min_purchase).value).to eq("5")
     end
   end
 end
