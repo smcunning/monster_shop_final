@@ -4,6 +4,8 @@ class Merchant::DiscountsController < Merchant::BaseController
   end
 
   def new
+    @merchant = current_user.merchant
+    @discount = Discount.new
   end
 
   def show
@@ -14,10 +16,10 @@ class Merchant::DiscountsController < Merchant::BaseController
     @discount = @merchant.discounts.new(discount_params)
     if @discount.save
       flash[:alert] = 'New discount created successfully!'
-      redirect_to "/merchant/discounts"
+      redirect_to merchant_discounts_path
     else
       flash[:error] = @discount.errors.full_messages.to_sentence
-      render :new
+      redirect_to new_merchant_discount_path
     end
   end
 
