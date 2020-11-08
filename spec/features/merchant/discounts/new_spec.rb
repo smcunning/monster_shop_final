@@ -19,7 +19,7 @@ describe "As a merchant employee" do
 
     it 'I can add a new discount by filling out a form' do
       name = "15% Off"
-      percentage = .15
+      percentage = 0.15
       min_purchase = 30
 
       click_link "Create Discount"
@@ -30,7 +30,7 @@ describe "As a merchant employee" do
       fill_in :percentage, with: percentage
       fill_in :min_purchase, with: min_purchase
 
-      click_button "Create Discount"
+      click_button "Save"
 
       new_discount = Discount.last
 
@@ -39,7 +39,7 @@ describe "As a merchant employee" do
       expect(new_discount.percentage).to eq(percentage)
       expect(new_discount.min_purchase).to eq(min_purchase)
       expect(new_discount.merchant_id).to eq(@merchant.id)
-      expect(Item.last.active?).to be(false)
+      expect(new_discount.active?).to be(false)
 
       expect(page).to have_content("New discount created successfully!")
 
@@ -51,9 +51,11 @@ describe "As a merchant employee" do
       end
     end
 
-    it 'I cannot add a discount without certain information' do
+#Sad Path Tests
+
+    describe 'I cannot add a discount without certain information' do
       it 'no name' do
-        percentage = .15
+        percentage = 0.15
         min_purchase = 30
 
         click_link "Create Discount"
@@ -62,10 +64,10 @@ describe "As a merchant employee" do
         fill_in :percentage, with: percentage
         fill_in :min_purchase, with: min_purchase
 
-        click_button "Create Discount"
+        click_button "Save"
 
-        expect(current_path).to eq("/merchant/discounts/new")
-        expect(page).to have_content("Must have name")
+        expect(current_path).to eq("/merchant/discounts")
+        expect(page).to have_content("Name can't be blank")
       end
 
       it 'no percentage' do
@@ -78,15 +80,15 @@ describe "As a merchant employee" do
         fill_in :percentage, with: ""
         fill_in :min_purchase, with: min_purchase
 
-        click_button "Create Discount"
+        click_button "Save"
 
-        expect(current_path).to eq("/merchant/discounts/new")
-        expect(page).to have_content("Must have percentage")
+        expect(current_path).to eq("/merchant/discounts")
+        expect(page).to have_content("Percentage can't be blank")
       end
 
       it 'no min purchase' do
         name = "15% Off"
-        percentage = .15
+        percentage = 0.15
 
         click_link "Create Discount"
 
@@ -94,11 +96,23 @@ describe "As a merchant employee" do
         fill_in :percentage, with: percentage
         fill_in :min_purchase, with: ""
 
-        click_button "Create Discount"
+        click_button "Save"
 
-        expect(current_path).to eq("/merchant/discounts/new")
-        expect(page).to have_content("Must have minimum purchase")
+        expect(current_path).to eq("/merchant/discounts")
+        expect(page).to have_content("Min purchase can't be blank")
       end
+    end
+
+    xit 'I cannot add negative percentage value' do
+
+    end
+
+    xit 'I cannot add negative minimum purchase value' do
+
+    end
+
+    xit 'I cannot add a duplicate discount' do
+
     end
   end
 end
