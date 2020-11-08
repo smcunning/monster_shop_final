@@ -12,6 +12,7 @@
       <p>Discount Percentage: <%= discount.percentage %><br>
       Minimum Purchase for Discount: <%= discount.min_purchase %></p>
       <%= button_to "Edit", "/merchant/discounts/#{discount.id}/edit", method: :get %>
+      <%= button_to "Delete", "/merchant/discounts/#{discount.id}", method: :delete %>
       <% if discount.active? %>
         <%= "Discount Active" %>
       <% else %>
