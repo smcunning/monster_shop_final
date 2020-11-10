@@ -17,7 +17,7 @@ describe 'as a merchant employee' do
       @m2_item1 = @merchant_2.items[0]
       @m2_item2 = @merchant_2.items[1]
       @m2_item3 = @merchant_2.items[2]
-      @order = create(:order, user: @user)
+      @order = Order.create!(name: "Lady Bug", address: "1000 Cool St.", city: "Denver", state: "CO", zip: 80013, user: @user)
       @io1 = create(:item_order, order: @order, item: @m1_item1, quantity: 2)
       @io2 = create(:item_order, order: @order, item: @m1_item2, quantity: 35)
       @io3 = create(:item_order, order: @order, item: @m1_item3)

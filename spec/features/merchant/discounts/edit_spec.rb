@@ -5,9 +5,9 @@ describe "As a merchant employee" do
     before :each do
       @merchant = create(:merchant)
       @merchant_user = create(:user, role: 1, merchant_id: @merchant.id)
-      @discount_1 = Discount.create!(name: "5% Off", percentage: 0.05, min_purchase: 5, active?: true, merchant_id: @merchant.id)
-      @discount_2 = Discount.create!(name: "10% Off", percentage: 0.10, min_purchase: 10, active?: true, merchant_id: @merchant.id)
-      @discount_3 = Discount.create!(name: "25% Off", percentage: 0.25, min_purchase: 5, active?: false, merchant_id: @merchant.id)
+      @discount_1 = Discount.create!(name: "5% Off", percentage: 5, min_purchase: 5, active?: true, merchant_id: @merchant.id)
+      @discount_2 = Discount.create!(name: "10% Off", percentage: 10, min_purchase: 10, active?: true, merchant_id: @merchant.id)
+      @discount_3 = Discount.create!(name: "25% Off", percentage: 25, min_purchase: 5, active?: false, merchant_id: @merchant.id)
 
       visit login_path
       fill_in :email, with: @merchant_user.email
@@ -37,9 +37,9 @@ describe "As a merchant employee" do
     before :each do
       @merchant = create(:merchant)
       @merchant_user = create(:user, role: 1, merchant_id: @merchant.id)
-      @discount_1 = Discount.create!(name: "5% Off", percentage: 0.05, min_purchase: 5, active?: true, merchant_id: @merchant.id)
-      @discount_2 = Discount.create!(name: "10% Off", percentage: 0.10, min_purchase: 10, active?: true, merchant_id: @merchant.id)
-      @discount_3 = Discount.create!(name: "25% Off", percentage: 0.25, min_purchase: 5, active?: false, merchant_id: @merchant.id)
+      @discount_1 = Discount.create!(name: "5% Off", percentage: 5, min_purchase: 5, active?: true, merchant_id: @merchant.id)
+      @discount_2 = Discount.create!(name: "10% Off", percentage: 10, min_purchase: 10, active?: true, merchant_id: @merchant.id)
+      @discount_3 = Discount.create!(name: "25% Off", percentage: 25, min_purchase: 5, active?: false, merchant_id: @merchant.id)
 
       visit login_path
       fill_in :email, with: @merchant_user.email
@@ -62,7 +62,7 @@ describe "As a merchant employee" do
 
     it "and I can change the data about the item" do
       fill_in :discount_name, with: "Holiday Promo"
-      fill_in :discount_percentage, with: 0.20
+      fill_in :discount_percentage, with: 20
       fill_in :discount_min_purchase, with: 5
 
       click_on "Update Discount"
@@ -72,7 +72,7 @@ describe "As a merchant employee" do
 
       within "#discount-#{@discount_1.id}" do
         expect(page).to have_content("Holiday Promo")
-        expect(page).to have_content("0.2")
+        expect(page).to have_content("20")
         expect(page).to have_content("5")
       end
     end
@@ -80,14 +80,14 @@ describe "As a merchant employee" do
 
     it 'I get a flash message if entire form is not filled out' do
       fill_in :discount_name, with: ""
-      fill_in :discount_percentage, with: 0.20
+      fill_in :discount_percentage, with: 20
       fill_in :discount_min_purchase, with: 5
 
       click_button "Update Discount"
 
       expect(page).to have_content("Name can't be blank")
       expect(find_field(:discount_name).value).to eq("5% Off")
-      expect(find_field(:discount_percentage).value).to eq("0.05")
+      expect(find_field(:discount_percentage).value).to eq("5")
       expect(find_field(:discount_min_purchase).value).to eq("5")
     end
   end

@@ -274,18 +274,18 @@ RSpec.describe 'Cart show' do
 
       expect(page).to have_content("Total: $675.00")
     end
-  end
 
   it 'does not apply discounts when they are not active' do
     visit "/items/#{@abishai.id}"
     click_button "Add To Cart"
     visit "/cart"
 
-    within "#cart-item-#{@abishai.id}" do
-      expect(page).to_not have_content("#{@discount_20_off.percentage} Percent Discount Applied!")
-      expect(page).to have_content("$25.00")
-      expect(page).to have_content("1")
-      expect(page).to have_content("$25.00")
+      within "#cart-item-#{@abishai.id}" do
+        expect(page).to_not have_content("#{@discount_20_off.percentage} Percent Discount Applied!")
+        expect(page).to have_content("$25.00")
+        expect(page).to have_content("1")
+        expect(page).to have_content("$25.00")
+      end
     end
   end
 end
