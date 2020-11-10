@@ -8,6 +8,7 @@
     <th>Sold By</th>
     <th>Price</th>
     <th>Quantity</th>
+    <th>Discount</th>
     <th>Subtotal</th>
   </tr>
   <% @items.each do |item,quantity| %>
@@ -40,7 +41,7 @@
           <% if cart.apply_discount(item) %>
             <p><%= cart.apply_discount(item) %> Percent Discount Applied!</p>
           <% else %>
-             <%= item.merchant.discounts.each do |discount| %>
+             <% item.merchant.discounts.each do |discount| %>
               <p>Buy <%= discount.min_purchase %> Items to Receive <%= discount.percentage %> Percent Off! </p>
             <% end  %>
           <% end %>
