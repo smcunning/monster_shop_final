@@ -89,5 +89,11 @@ RSpec.describe Cart do
       cart = Cart.new({@ogre.id.to_s => 5})
       expect(cart.apply_discount(@ogre)).to eq(5)
     end
+
+    it ".sale_price" do
+      discount = @megan.discounts.create!(name: "5 Off 5 Items", percentage: 5, min_purchase: 5)
+      cart = Cart.new({@ogre.id.to_s => 5})
+      expect(cart.sale_price(@ogre)).to eq(19)
+    end
   end
 end
