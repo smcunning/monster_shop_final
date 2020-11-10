@@ -29,20 +29,36 @@ class Merchant::DiscountsController < Merchant::BaseController
   end
 
   def update
-    @discount = Discount.find(params[:format])
-    @discount.attributes = discount_params
-    if @discount.save
-      flash[:success] = 'Discount has been successfully updated!'
-      redirect_to merchant_discounts_path
+    if params[:status]
+      toggle_activation
     else
-      flash[:error] = @discount.errors.full_messages.to_sentence
-      redirect_to "/merchant/discounts/#{@discount.id}/edit"
+      @discount = Discount.find(params[:id])
+      @discount.attributes = discount_params
+      if @discount.save
+        flash[:success] = 'Discount has been successfully updated!'
+        redirect_to merchant_discounts_path
+      else
+        flash[:error] = @discount.errors.full_messages.to_sentence
+        redirect_to "/merchant/discounts/#{@discount.id}/edit"
+      end
     end
   end
 
   def destroy
     Discount.find(params[:id]).destroy
     redirect_to merchant_discounts_path
+  end
+
+  def toggle_activation
+    @discount = Discount.find(params[:id])
+    if params[:status] == 'deactivate'
+      @discount.update(:active? => false)
+      flash[:alert] = 'This discount is now inactive.'
+    elsif params[:status] == 'activate'
+      @discount.update(:active? => true)
+      flash[:alert] = 'This discount is now activated.'
+    end
+    redirect_to "/merchant/discounts"
   end
 
   private
