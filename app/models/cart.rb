@@ -30,13 +30,16 @@ class Cart
   end
 
   def subtotal(item)
-    item.price * @contents[item.id.to_s]
+    sale_price(item) * @contents[item.id.to_s]
   end
 
   def total
-    @contents.sum do |item_id,quantity|
-      Item.find(item_id).price * quantity
+    total = 0.0
+    @contents.each do |item_id,quantity|
+      item = Item.find(item_id)
+      total += sale_price(item) * quantity
     end
+    total
   end
 
   def inventory_check(item)
