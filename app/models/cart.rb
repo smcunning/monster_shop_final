@@ -51,4 +51,11 @@ class Cart
     item.merchant.discounts.where("? >= min_purchase", item_count(item.id)).order(percentage: :desc).limit(1).pluck(:percentage).first
   end
 
+  def sale_price(item)
+    if apply_discount(item)
+      item.price * (100 - apply_discount(item))*0.01
+    else
+      item.price
+    end
+  end
 end
