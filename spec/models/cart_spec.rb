@@ -79,5 +79,10 @@ RSpec.describe Cart do
       expect(@cart.inventory_check(@ogre)).to eq(true)
     end
 
+    it '.item_count' do
+      expect(@cart.item_count(@ogre.id)).to eq(1)
+      expect(@cart.item_count(@giant.id)).to eq(2)
+    end
+    
   end
 end
