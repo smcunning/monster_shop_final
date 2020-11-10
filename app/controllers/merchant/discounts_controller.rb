@@ -32,7 +32,7 @@ class Merchant::DiscountsController < Merchant::BaseController
     if params[:status]
       toggle_activation
     else
-      @discount = Discount.find(params[:id])
+      @discount = Discount.find(params[:format])
       @discount.attributes = discount_params
       if @discount.save
         flash[:success] = 'Discount has been successfully updated!'
