@@ -4,4 +4,6 @@ class Discount < ApplicationRecord
                         :percentage,
                         :min_purchase
   validates_inclusion_of :active?, :in => [true, false]
+  validates_numericality_of :percentage, greater_than: 1, less_than: 100
+  validates_numericality_of :min_purchase, greater_than: 0
 end
