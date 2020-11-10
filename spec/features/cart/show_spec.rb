@@ -124,10 +124,13 @@ RSpec.describe 'Cart show' do
       @succubus = @gobbeldygook.items.create!(name: "Succubus", description: "Demon of unpure wiles", price: 50, inventory: 25, image: "https://static.wikia.nocookie.net/forgottenrealms/images/8/8d/Succubus-5e.jpg/revision/latest/scale-to-width-down/591?cb=20161121204309")
       @abishai = @monstersrus.items.create!(name: "Abishai", description: "Draconic devil in service to the queen", price: 25, inventory: 75, image: "https://static.wikia.nocookie.net/forgottenrealms/images/7/78/Abishai_Colors.jpg/revision/latest/scale-to-width-down/400?cb=20110908013842")
       @discount_5_off = Discount.create!(name: "5% off of 5 items", percentage: 5, min_purchase: 5, merchant_id: @gobbeldygook.id, active?: true)
+      @discount_6_off = Discount.create!(name: "6% off of 6 items", percentage: 6, min_purchase: 6, active?: true, merchant_id: @gobbeldygook.id)
+      @discount_20_off = Discount.create!(name: "20% Off of 10 or More", percentage: 20, min_purchase: 10, merchant_id: @monstersrus.id, active?: true)
 
       visit "/items/#{@pitfiend.id}"
       click_button "Add To Cart"
       visit "/cart"
+
       click_button "+"
       click_button "+"
       click_button "+"
@@ -135,7 +138,7 @@ RSpec.describe 'Cart show' do
 
     it 'when I add enough items to qualify for a discount, it appears in the cart' do
       within "#cart-item-#{@pitfiend.id}" do
-        expect(page).to have_content("Subtotal: $400.00")
+        expect(page).to have_content("$400.00")
         expect(page).to have_content("4")
         expect(page).to have_content("$100.00")
 
@@ -143,8 +146,8 @@ RSpec.describe 'Cart show' do
       end
 
       within "#cart-item-#{@pitfiend.id}" do
-        expect(page).to have_content("#{@discount_5_off} Percent Discount Applied!")
-        expect(page).to have_content("Subtotal: $475.00")
+        expect(page).to have_content("#{@discount_5_off.percentage} Percent Discount Applied!")
+        expect(page).to have_content("$475.00")
         expect(page).to_not have_content("$500.00")
         expect(page).to have_content("5")
         expect(page).to have_content("$95.00")
@@ -152,16 +155,18 @@ RSpec.describe 'Cart show' do
     end
 
     it 'when I remove items from the cart and disqualify for a discount, the discount disappears' do
-      within "#cart-item-#{@pitfiend.id}" do
-        click_button "+"
-        expect(page).to have_content("#{@discount_5_off.percentage} Percent Discount Applied!")
-        expect(page).to have_content("Subtotal: $475.00")
-      end
+      click_button "+"
 
       within "#cart-item-#{@pitfiend.id}" do
-        click_button "-"
+        expect(page).to have_content("#{@discount_5_off.percentage} Percent Discount Applied!")
+        expect(page).to have_content("$475.00")
+      end
+
+      click_button "-"
+
+      within "#cart-item-#{@pitfiend.id}" do
         expect(page).to_not have_content("#{@discount_5_off.percentage} Percent Discount Applied!")
-        expect(page).to have_content("Subtotal: $400.00")
+        expect(page).to have_content("$400.00")
       end
     end
 
@@ -180,7 +185,7 @@ RSpec.describe 'Cart show' do
 
       within "#cart-item-#{@succubus.id}" do
         expect(page).to_not have_content("#{@discount_5_off.percentage} Percent Discount Applied!")
-        expect(page).to_not have_content("#{@succubus.price}")
+        expect(page).to have_content("#{@succubus.price}")
       end
     end
 
@@ -189,52 +194,50 @@ RSpec.describe 'Cart show' do
         click_button "+"
       end
 
-      visit "/items/#{@succubus.id}"
+      visit "/items/#{@abishai.id}"
       click_button "Add To Cart"
       visit "/cart"
 
       within "#cart-item-#{@pitfiend.id}" do
-        expect(page).to have_content("Bulk Discount Applied")
+        expect(page).to have_content("#{@discount_5_off.percentage} Percent Discount Applied!")
       end
 
-      within "#cart-item-#{@succubus.id}" do
+      within "#cart-item-#{@abishai.id}" do
         click_button "+"
         click_button "+"
         click_button "+"
         click_button "+"
 
         expect(page).to_not have_content("#{@discount_5_off.percentage} Percent Discount Applied!")
-        expect(page).to_not have_content("#{@succubus.price}")
+        expect(page).to have_content("#{@abishai.price}")
       end
     end
 
 
     it 'if the item qualifies for two or more discounts, the larger discount applies' do
-      @discount_3_off = Discount.create!(name: "3% Off of 3 Or More", percentage: 3, min_purchase: 3, merchant_id: @gobbeldygook.id, active?: true)
-
-      within "#cart-item-#{@pitfiend.id}" do
-        expect(page).to have_content("#{@discount_3_off.percentage} Percent Discount Applied!")
-        expect(page).to have_content("Subtotal: $388.00")
-        expect(page).to have_content("4")
-        expect(page).to have_content("$97.00")
-      end
 
       within "#cart-item-#{@pitfiend.id}" do
         click_button "+"
         expect(page).to have_content("#{@discount_5_off.percentage} Percent Discount Applied!")
-        expect(page).to have_content("Subtotal: $475.00")
+        expect(page).to have_content("$475.00")
         expect(page).to have_content("5")
         expect(page).to have_content("$95.00")
+      end
 
-        expect(page).to_not have_content("#{@discount_3_off.percentage} Percent Discount Applied!")
-        expect(page).to_not have_content("Subtotal: $388.00")
-        expect(page).to_not have_content("4")
-        expect(page).to_not have_content("$97.00")
+      within "#cart-item-#{@pitfiend.id}" do
+        click_button "+"
+        expect(page).to have_content("#{@discount_6_off.percentage} Percent Discount Applied!")
+        expect(page).to have_content("$564.00")
+        expect(page).to have_content("6")
+        expect(page).to have_content("$94.00")
+
+        expect(page).to_not have_content("#{@discount_5_off.percentage} Percent Discount Applied!")
+        expect(page).to_not have_content("$475.00")
+        expect(page).to_not have_content("$95.00")
       end
     end
 
     it 'can apply discounts from multiple merchants in the same cart' do
-      @discount_20_off = Discount.create!(name: "20% Off of 1 or More", percentage: 20, min_purchase: 1, merchant_id: @monstersrus.id, active?: true)
 
       within "#cart-item-#{@pitfiend.id}" do
         click_button "+"
@@ -245,34 +248,42 @@ RSpec.describe 'Cart show' do
       visit "/cart"
 
       within "#cart-item-#{@abishai.id}" do
-        expect(page).to have_content("#{@discount_2_off.percentage} Percent Discount Applied!")
-        expect(page).to have_content("Subtotal: $20.00")
-        expect(page).to have_content("1")
+        click_button "+"
+        click_button "+"
+        click_button "+"
+        click_button "+"
+        click_button "+"
+        click_button "+"
+        click_button "+"
+        click_button "+"
+        click_button "+"
+
+
+        expect(page).to have_content("#{@discount_20_off.percentage} Percent Discount Applied!")
         expect(page).to have_content("$20.00")
-        expect(page).to have_content("You saved $5.00!")
+        expect(page).to have_content("1")
+        expect(page).to have_content("$200.00")
       end
 
       within "#cart-item-#{@pitfiend.id}" do
         expect(page).to have_content("#{@discount_5_off.percentage} Percent Discount Applied!")
-        expect(page).to have_content("Subtotal: $475.00")
+        expect(page).to have_content("$475.00")
         expect(page).to have_content("5")
         expect(page).to have_content("$95.00")
       end
 
-      expect(page).to have_content("Total: $115.00")
+      expect(page).to have_content("Total: $675.00")
     end
   end
 
   it 'does not apply discounts when they are not active' do
-    @discount_20_off = Discount.create!(name: "20% Off of 1 or More", percentage: 20, min_purchase: 1, merchant_id: @monstersrus.id, active?: false)
-
     visit "/items/#{@abishai.id}"
     click_button "Add To Cart"
     visit "/cart"
 
     within "#cart-item-#{@abishai.id}" do
-      expect(page).to_not have_content("Bulk Discount Applied")
-      expect(page).to have_content("Subtotal: $25.00")
+      expect(page).to_not have_content("#{@discount_20_off.percentage} Percent Discount Applied!")
+      expect(page).to have_content("$25.00")
       expect(page).to have_content("1")
       expect(page).to have_content("$25.00")
     end
