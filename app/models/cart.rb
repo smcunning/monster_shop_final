@@ -43,4 +43,8 @@ class Cart
     @contents[item.id.to_s] < item.inventory
   end
 
+  def item_count(item_id)
+    @contents[item_id.to_s]
+  end
+
 end
