@@ -79,5 +79,21 @@ RSpec.describe Cart do
       expect(@cart.inventory_check(@ogre)).to eq(true)
     end
 
+    it '.item_count' do
+      expect(@cart.item_count(@ogre.id)).to eq(1)
+      expect(@cart.item_count(@giant.id)).to eq(2)
+    end
+
+    it '.apply_discount' do
+      discount = @megan.discounts.create!(name: "5 off for 5", percentage: 5, min_purchase: 5)
+      cart = Cart.new({@ogre.id.to_s => 5})
+      expect(cart.apply_discount(@ogre)).to eq(5)
+    end
+
+    it ".sale_price" do
+      discount = @megan.discounts.create!(name: "5 Off 5 Items", percentage: 5, min_purchase: 5)
+      cart = Cart.new({@ogre.id.to_s => 5})
+      expect(cart.sale_price(@ogre)).to eq(19)
+    end
   end
 end

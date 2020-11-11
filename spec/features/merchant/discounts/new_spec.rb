@@ -5,9 +5,9 @@ describe "As a merchant employee" do
     before(:each) do
       @merchant = create(:merchant)
       @merchant_user = create(:user, role: 1, merchant_id: @merchant.id)
-      @discount_1 = Discount.create!(name: "5% Off", percentage: 0.05, min_purchase: 5, active?: true, merchant_id: @merchant.id)
-      @discount_2 = Discount.create!(name: "10% Off", percentage: 0.10, min_purchase: 10, active?: true, merchant_id: @merchant.id)
-      @discount_3 = Discount.create!(name: "25% Off", percentage: 0.25, min_purchase: 5, active?: false, merchant_id: @merchant.id)
+      @discount_1 = Discount.create!(name: "5% Off", percentage: 5, min_purchase: 5, active?: true, merchant_id: @merchant.id)
+      @discount_2 = Discount.create!(name: "10% Off", percentage: 10, min_purchase: 10, active?: true, merchant_id: @merchant.id)
+      @discount_3 = Discount.create!(name: "25% Off", percentage: 25, min_purchase: 5, active?: false, merchant_id: @merchant.id)
 
       visit login_path
       fill_in :email, with: @merchant_user.email
@@ -19,7 +19,7 @@ describe "As a merchant employee" do
 
     it 'I can add a new discount by filling out a form' do
       name = "15% Off"
-      percentage = 0.15
+      percentage = 15
       min_purchase = 30
 
       click_link "Create Discount"
@@ -103,16 +103,72 @@ describe "As a merchant employee" do
       end
     end
 
-    xit 'I cannot add negative percentage value' do
+    it 'I cannot add negative percentage value' do
+      name = "-5 Percent Off"
+      percentage = -5
+      min_purchase = 1
 
+      click_link "Create Discount"
+
+      fill_in :discount_name, with: name
+      fill_in :discount_percentage, with: percentage
+      fill_in :discount_min_purchase, with: min_purchase
+
+      click_button "Create Discount"
+
+      expect(current_path).to eq("/merchant/discounts/new")
+      expect(page).to have_content("Percentage must be greater than 1")
     end
 
-    xit 'I cannot add negative minimum purchase value' do
+    it 'I cannot add over 100% percentage value' do
+      name = "105 Percent Off"
+      percentage = 105
+      min_purchase = 1
 
+      click_link "Create Discount"
+
+      fill_in :discount_name, with: name
+      fill_in :discount_percentage, with: percentage
+      fill_in :discount_min_purchase, with: min_purchase
+
+      click_button "Create Discount"
+
+      expect(current_path).to eq("/merchant/discounts/new")
+      expect(page).to have_content("Percentage must be less than 100")
     end
 
-    xit 'I cannot add a duplicate discount' do
+    it 'I cannot add negative minimum purchase value' do
+      name = "5 Percent Off"
+      percentage = 5
+      min_purchase = -1
 
+      click_link "Create Discount"
+
+      fill_in :discount_name, with: name
+      fill_in :discount_percentage, with: percentage
+      fill_in :discount_min_purchase, with: min_purchase
+
+      click_button "Create Discount"
+
+      expect(current_path).to eq("/merchant/discounts/new")
+      expect(page).to have_content("Min purchase must be greater than 0")
+    end
+
+    it 'I cannot add a duplicate discount' do
+      name = "5% Off"
+      percentage = 5
+      min_purchase = 5
+
+      click_link "Create Discount"
+
+      fill_in :discount_name, with: name
+      fill_in :discount_percentage, with: percentage
+      fill_in :discount_min_purchase, with: min_purchase
+
+      click_button "Create Discount"
+
+      expect(current_path).to eq("/merchant/discounts/new")
+      expect(page).to have_content("Cannot create a duplicate discount")
     end
   end
 end

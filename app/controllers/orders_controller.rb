@@ -20,7 +20,7 @@ class OrdersController <ApplicationController
         order.item_orders.create({
           item: item,
           quantity: quantity,
-          price: item.price
+          price: cart.sale_price(item)
           })
       end
       session.delete(:cart)
