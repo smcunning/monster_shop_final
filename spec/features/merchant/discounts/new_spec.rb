@@ -44,7 +44,7 @@ describe "As a merchant employee" do
       expect(page).to have_content("New discount created successfully!")
 
       within "#discount-#{Discount.last.id}" do
-        expect(page).to have_link(new_discount.name)
+        expect(page).to have_content(new_discount.name)
         expect(page).to have_content(new_discount.percentage)
         expect(page).to have_content(new_discount.min_purchase)
         expect(page).to have_content("Discount Inactive")
@@ -152,23 +152,6 @@ describe "As a merchant employee" do
 
       expect(current_path).to eq("/merchant/discounts/new")
       expect(page).to have_content("Min purchase must be greater than 0")
-    end
-
-    it 'I cannot add a duplicate discount' do
-      name = "5% Off"
-      percentage = 5
-      min_purchase = 5
-
-      click_link "Create Discount"
-
-      fill_in :discount_name, with: name
-      fill_in :discount_percentage, with: percentage
-      fill_in :discount_min_purchase, with: min_purchase
-
-      click_button "Create Discount"
-
-      expect(current_path).to eq("/merchant/discounts/new")
-      expect(page).to have_content("Cannot create a duplicate discount")
     end
   end
 end
