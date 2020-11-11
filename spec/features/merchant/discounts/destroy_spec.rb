@@ -17,7 +17,6 @@ describe 'As a merchant' do
   end
 
   it "I see a delete button next to any discount" do
-
     within "#discount-#{@discount_1.id}" do
       expect(page).to have_button("Delete")
     end
@@ -32,7 +31,6 @@ describe 'As a merchant' do
   end
 
   it 'I can delete a discount' do
-
     within "#discount-#{@discount_1.id}" do
       click_button "Delete"
     end

@@ -8,9 +8,6 @@ class Merchant::DiscountsController < Merchant::BaseController
     @discount = Discount.new
   end
 
-  def show
-  end
-
   def create
     @merchant = Merchant.find(current_user.merchant_id)
     @discount = @merchant.discounts.new(discount_params)
@@ -49,6 +46,11 @@ class Merchant::DiscountsController < Merchant::BaseController
     redirect_to merchant_discounts_path
   end
 
+  private
+  def discount_params
+    params.require(:discount).permit(:name, :percentage, :min_purchase, :id)
+  end
+
   def toggle_activation
     @discount = Discount.find(params[:id])
     if params[:status] == 'deactivate'
@@ -59,10 +61,5 @@ class Merchant::DiscountsController < Merchant::BaseController
       flash[:alert] = 'This discount is now activated.'
     end
     redirect_to "/merchant/discounts"
-  end
-
-  private
-  def discount_params
-    params.require(:discount).permit(:name, :percentage, :min_purchase, :id)
   end
 end
