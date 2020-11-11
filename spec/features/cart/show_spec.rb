@@ -116,6 +116,8 @@ RSpec.describe 'Cart show' do
     end
   end
 
+#Bulk Discounts
+
   describe "I can buy items in bulk and receive a discount" do
     before :each do
       @gobbeldygook = Merchant.create!(name: "Gobbeldygooks Monster Depot", address: "666 Fire and Brimstone Rd.", city: "Sheol", state: "Hell", zip: "66666")
