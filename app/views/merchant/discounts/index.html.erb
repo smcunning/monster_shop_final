@@ -8,7 +8,7 @@
   <h2>All Discount Details</h2>
   <% @merchant.discounts.each do |discount| %>
     <section id="discount-<%= discount.id %>">
-      <h4><%= link_to "#{discount.name}", "/merchant/discounts/#{discount.id}" %></h4>
+      <h4><%= discount.name %></h4>
       <p>Discount Percentage: <%= discount.percentage %><br>
       Minimum Purchase for Discount: <%= discount.min_purchase %></p>
       <%= button_to "Edit", "/merchant/discounts/#{discount.id}/edit", method: :get %>
