@@ -43,7 +43,7 @@ class Merchant::DiscountsController < Merchant::BaseController
 
   def destroy
     Discount.find(params[:id]).destroy
-    redirect_to merchant_discounts_path
+    redirect_to merchant_discount_path
   end
 
   private
